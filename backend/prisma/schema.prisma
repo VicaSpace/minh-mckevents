@@ -18,7 +18,6 @@ model Event {
   description        String
   date               DateTime
   duration           Float            @default(1.0)
-  timeStart          DateTime @map("time_start")
   location           String
   minParticipants    Int @map("min_participants")
   office             String

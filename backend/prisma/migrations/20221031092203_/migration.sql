@@ -11,7 +11,6 @@ CREATE TABLE "event" (
     "description" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "duration" DOUBLE PRECISION NOT NULL DEFAULT 1.0,
-    "time_start" TIMESTAMP(3) NOT NULL,
     "location" TEXT NOT NULL,
     "min_participants" INTEGER NOT NULL,
     "office" TEXT NOT NULL,
