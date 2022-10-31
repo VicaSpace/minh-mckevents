@@ -1,0 +1,6 @@
+{
+  "eslint.workingDirectories": ["./frontend", "./backend"],
+  "git.ignoreLimitWarning": true,
+  "cSpell.words": ["transportclose"],
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}
