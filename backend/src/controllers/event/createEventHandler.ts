@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { createEvent } from '@/services/event/createEvent';
 
 /**
- * Handler for CreateEventHandler
+ * Handler for CreateEvent
  * @param req Request
  * @param res Response
  */
@@ -11,8 +11,8 @@ export const createEventHandler = async (req: Request, res: Response) => {
   const { body, user } = req;
   const createdEvent = await createEvent({
     name: body.name,
-    organizerId: user.id,
     description: body.description,
+    organizerId: user.id,
     location: body.location,
     date: new Date(body.date),
     timeStart: new Date(body.timeStart),

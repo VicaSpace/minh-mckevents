@@ -20,20 +20,54 @@ export interface CreateEventPayload {
  * @returns Created Event
  */
 export const createEvent = async (payload: CreateEventPayload) => {
+  const {
+    date,
+    description,
+    location,
+    minParticipants,
+    name,
+    office,
+    timeStart,
+    duration,
+    organizerId,
+  } = payload;
   // Create Event
   const event = await prisma.event.create({
     data: {
-      ...payload,
+      name,
+      organizerId,
+      description,
+      date,
+      office,
+      duration,
+      location,
+      minParticipants,
       status: EventStatus.PENDING,
     },
   });
 
+  // Initial first participant for that event
+  await prisma.eventParticipation.create({
+    data: {
+      userId: organizerId,
+      eventId: event.id,
+    },
+  });
+
   // Create initial time slot for that
-  await prisma.timeSlot.create({
+  const initialSlot = await prisma.timeSlot.create({
     data: {
       eventId: event.id,
-      time: new Date(payload.timeStart),
+      time: new Date(timeStart),
       status: TimeSlotStatus.ACTIVE, // Still active for voting
+    },
+  });
+
+  // Cast a vote from the organizer for the initial slot
+  await prisma.timeSlotVote.create({
+    data: {
+      userId: organizerId,
+      timeSlotId: initialSlot.id,
     },
   });
   return event;

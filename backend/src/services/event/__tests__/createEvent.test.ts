@@ -21,7 +21,19 @@ describe('test event/createEvent service', () => {
       updatedAt: '2022-10-31T08:58:51.752Z',
     };
 
+    /* Mock methods */
     jest.spyOn(prisma.event, 'create').mockResolvedValue(expectedRes as any);
+    jest
+      .spyOn(prisma.eventParticipation, 'create')
+      .mockResolvedValue(null as any);
+    jest.spyOn(prisma.timeSlot, 'create').mockResolvedValue({
+      eventId: 2,
+    } as any);
+    jest.spyOn(prisma.timeSlotVote, 'create').mockResolvedValue({
+      userId: 1,
+      timeSlotId: 1,
+    } as any);
+
     const res = await createEvent({
       name: 'Weekend Soccer Match',
       description:
