@@ -11,3 +11,81 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                 Int             @id @default(autoincrement())
+  name               String
+  username           String
+  password           String
+  timeSlotVotes      TimeSlotVote[]
+  participations     EventParticipation[]
+  organizedEvents    Event[]
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  @@map("user")
+}
+
+model Event {
+  id                 Int             @id @default(autoincrement())
+  name               String
+  description        String
+  date               DateTime
+  duration           Float            @default(1.0)
+  timeStart          DateTime @map("time_start")
+  location           String
+  minParticipants    Int @map("min_participants")
+  office             String
+  organizer          User @relation(fields: [organizerId], references: [id])
+  organizerId        Int @map("organizer_id")
+  status             EventStatus
+  timeSlots          TimeSlot[]
+  participations     EventParticipation[]
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  @@map("event")
+}
+
+model TimeSlot {
+  id                 Int             @id @default(autoincrement())
+  time               DateTime
+  event              Event @relation(fields: [eventId], references: [id])
+  eventId            Int @map("event_id")
+  timeSlotVotes      TimeSlotVote[]
+  status             TimeSlotStatus
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  @@map("time_slot")
+}
+
+model TimeSlotVote {
+  id                 Int             @id @default(autoincrement())
+  timeSlot           TimeSlot        @relation(fields: [timeSlotId], references: [id])
+  timeSlotId         Int             @map("time_slot_id")
+  user               User            @relation(fields: [userId], references: [id])
+  userId             Int             @map("user_id")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  @@map("time_slot_vote")
+}
+
+model EventParticipation {
+  id                 Int             @id @default(autoincrement())
+  event              Event           @relation(fields: [eventId], references: [id])
+  eventId            Int             @map("event_id")
+  user               User            @relation(fields: [userId], references: [id])
+  userId             Int             @map("user_id")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  @@map("event_participation")
+}
+
+
+enum TimeSlotStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum EventStatus {
+  CONFIRMED
+  CANCELLED
+  PENDING
+}
