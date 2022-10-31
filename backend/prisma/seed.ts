@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 const seedEvents = async () => {
   await prisma.event.create({
     data: {
+      organizerId: 1,
       name: 'Badminton',
       date: new Date('2022-11-01'),
       location: 'Thanh Nhan Badminton Court, 49 Chua Boc, District Dong Da',

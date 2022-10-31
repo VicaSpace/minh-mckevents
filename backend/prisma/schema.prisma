@@ -11,18 +11,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                 Int             @id @default(autoincrement())
-  name               String
-  username           String
-  password           String
-  timeSlotVotes      TimeSlotVote[]
-  participations     EventParticipation[]
-  organizedEvents    Event[]
-  createdAt          DateTime        @default(now()) @map("created_at")
-  updatedAt          DateTime        @updatedAt @map("updated_at")
-  @@map("user")
-}
 
 model Event {
   id                 Int             @id @default(autoincrement())
@@ -34,7 +22,6 @@ model Event {
   location           String
   minParticipants    Int @map("min_participants")
   office             String
-  organizer          User @relation(fields: [organizerId], references: [id])
   organizerId        Int @map("organizer_id")
   status             EventStatus
   timeSlots          TimeSlot[]
@@ -60,7 +47,6 @@ model TimeSlotVote {
   id                 Int             @id @default(autoincrement())
   timeSlot           TimeSlot        @relation(fields: [timeSlotId], references: [id])
   timeSlotId         Int             @map("time_slot_id")
-  user               User            @relation(fields: [userId], references: [id])
   userId             Int             @map("user_id")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
@@ -71,7 +57,6 @@ model EventParticipation {
   id                 Int             @id @default(autoincrement())
   event              Event           @relation(fields: [eventId], references: [id])
   eventId            Int             @map("event_id")
-  user               User            @relation(fields: [userId], references: [id])
   userId             Int             @map("user_id")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")

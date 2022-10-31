@@ -2,9 +2,9 @@
 import { prisma } from '@/db';
 import { getUpcomingEvents } from '@/services/event/getUpcomingEvents';
 
-describe('test getUpcomingEvents service', () => {
+describe('test event/getUpcomingEvents service', () => {
   it('should return a list of upcoming events', async () => {
-    const expectedRes = [
+    const mockRes = [
       [
         {
           id: 1,
@@ -25,16 +25,16 @@ describe('test getUpcomingEvents service', () => {
         },
       ],
     ];
-    jest.spyOn(prisma.event, 'findMany').mockResolvedValue(expectedRes as any);
+    jest.spyOn(prisma.event, 'findMany').mockResolvedValue(mockRes as any);
     const res = await getUpcomingEvents();
     // Match every objects in response
-    expect(res).toMatchObject(expectedRes);
+    expect(res).toMatchObject(mockRes);
   });
   it('should return empty list when there are no upcoming events', async () => {
-    const expectedRes = [];
-    jest.spyOn(prisma.event, 'findMany').mockResolvedValue(expectedRes as any);
+    const mockRes = [];
+    jest.spyOn(prisma.event, 'findMany').mockResolvedValue(mockRes as any);
     const res = await getUpcomingEvents();
-    expect(res).toBe(expectedRes);
+    expect(res).toBe(mockRes);
   });
 
   it('should throw errors when encounter one', async () => {

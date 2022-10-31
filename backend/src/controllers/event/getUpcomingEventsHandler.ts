@@ -7,7 +7,7 @@ import { getUpcomingEvents } from '@/services/event/getUpcomingEvents';
  * @param req Request
  * @param res Response
  */
-export const getUpcomingEventsHandler = (req: Request, res: Response) => {
-  const events = getUpcomingEvents();
+export const getUpcomingEventsHandler = async (req: Request, res: Response) => {
+  const events = await getUpcomingEvents();
   res.status(200).json(events);
 };

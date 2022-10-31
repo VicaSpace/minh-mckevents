@@ -1,9 +1,13 @@
 import cors from 'cors';
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
+import bearerToken from 'express-bearer-token';
 import http from 'http';
+import createHttpError from 'http-errors';
+import * as jwt from 'jsonwebtoken';
 import pinoHttp from 'pino-http';
 
+import config from '@/config';
 import router from '@/routes';
 import { logger } from '@/utils/logger';
 
@@ -18,10 +22,32 @@ const main = async () => {
   app.use(pinoHttpMiddleware);
   app.use(express.json());
 
+  // Extract token middleware
+  app.use(
+    bearerToken({
+      headerKey: 'Bearer',
+    })
+  );
+  // Verify user middleware
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    try {
+      const decodedUser = jwt.verify(req.token, config.jwt.secret);
+      req.user = decodedUser as jwt.JwtPayload;
+      next();
+    } catch (err) {
+      next(
+        createHttpError(
+          401,
+          'Corrupted/Invalid credentials, please login first.'
+        )
+      );
+    }
+  });
+
   app.use('/api', router);
 
   app.get('/', (_req, res) => {
-    res.send('<h1>Welcome to BanhMi Server.</h1>');
+    res.send('<h1>Welcome to Backend Server of McKEvents.</h1>');
   });
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +62,7 @@ const main = async () => {
 
   server.listen(process.env.APP_PORT, () => {
     logger.info(
-      `Server listening on ${process.env.APP_HOST}:${process.env.APP_PORT}`
+      `Backend Server listening on ${process.env.APP_HOST}:${process.env.APP_PORT}`
     );
   });
 };
