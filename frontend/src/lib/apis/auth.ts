@@ -1,30 +1,64 @@
 import axios from 'axios';
-import process from 'process';
 
-const URL = process.env.REACT_APP_BACKEND_URL ?? '';
+import config from '@/config';
 
-export const signInViaAPI = async (
-  username: string,
-  hashedPassword: string
-) => {
-  const res = await axios.post(`${URL}/api/auth/login`, {
-    username,
-    hashedPassword,
+export interface RegisterUserPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+}
+
+/**
+ * Register a User
+ * @returns Registered User
+ */
+export const registerUser = async (payload: RegisterUserPayload) => {
+  const res = await axios.post(`${config.endpoint.auth}/api/auth/register`, {
+    ...payload,
   });
   return res.data;
 };
 
-export const getSaltViaAPI = async (username: string) => {
-  const res = await axios.get(`${URL}/api/auth/users/${username}/salt`);
-  return res.data.salt;
+export interface LoginPayload {
+  username: string;
+  password: string;
+}
+
+/**
+ * Login a User
+ * @returns Registered User
+ */
+export const loginUser = async (payload: LoginPayload) => {
+  const res = await axios.post(`${config.endpoint.auth}/api/auth/login`, {
+    ...payload,
+  });
+  return res.data;
 };
 
-export const getUserInfoViaAPI = async (accessToken: string) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-  const res = await axios.get(`${URL}/api/auth/info`, config);
-  return res;
+export interface VerifyPayload {
+  accessToken: string;
+}
+
+export interface VerifyUser {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+/**
+ * Login a User
+ * @returns Registered User
+ */
+export const verifyUser = async (
+  payload: VerifyPayload
+): Promise<VerifyUser> => {
+  const { accessToken } = payload;
+  const res = await axios.get(
+    `${config.endpoint.auth}/api/auth/verify?accessToken=${accessToken}`
+  );
+  return res.data;
 };

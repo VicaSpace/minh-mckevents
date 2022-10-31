@@ -13,7 +13,9 @@ const App: React.FC<{}> = () => {
       <HelmetProvider>
         <Provider store={store}>
           <ChakraProvider theme={theme}>
-            <AppRouter />
+            <div className="layout">
+              <AppRouter />
+            </div>
           </ChakraProvider>
         </Provider>
       </HelmetProvider>

@@ -3,7 +3,7 @@ import { extendTheme } from '@chakra-ui/react';
 
 export const theme = extendTheme({
   fonts: {
-    heading: `'Inconsolata', monospace`,
-    body: `'Inconsolata', monospace`,
+    heading: `'Roboto', sans-serif`,
+    body: `'Roboto', sans-serif`,
   },
 });

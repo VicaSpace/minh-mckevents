@@ -1,7 +1,10 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
+import authSlice from '@/states/auth/slice';
 import counterSlice from '@/states/counter/slice';
+import loginModalSlice from '@/states/modals/loginModal/slice';
+import registerModalSlice from '@/states/modals/registerModal/slice';
 
 /* Main Redux Global Store configurations */
 export const store = configureStore({
@@ -9,6 +12,9 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   reducer: {
     counterSlice,
+    registerModalSlice,
+    authSlice,
+    loginModalSlice,
   },
 });
 
@@ -21,15 +27,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
-
-export enum ThunkFetchState {
-  Idle = 'idle',
-  Pending = 'pending',
-  Fulfilled = 'fulfilled',
-  Rejected = 'rejected',
-}
-
-export type ThunkStatus = 'idle' | 'pending' | 'fulfilled' | 'rejected';
 
 /* Error message type */
 export interface KnownThunkError {

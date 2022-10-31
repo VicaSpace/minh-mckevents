@@ -1,0 +1,29 @@
+.right-navbar-sign-in-btn {
+  margin-right: 32px;
+  background-color: #fff;
+  color: #257ce3;
+  border-color: #257ce3;
+  width: 120px;
+  height: 30px;
+}
+
+.right-navbar-sign-up-btn {
+  background-color: #257ce3e5;
+  color: #fff;
+  border-color: #257ce3;
+  width: 120px;
+  height: '30px';
+}
+
+.right-navbar-sign-up-btn:hover {
+  background-color: #216dcae5;
+}
+
+.right-navbar-sign-in-btn:hover {
+  background-color: rgb(222, 222, 222);
+}
+
+.right-navbar-user-info {
+  margin-bottom: 6.2px;
+  margin-right: 24px;
+}
