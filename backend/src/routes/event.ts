@@ -11,5 +11,6 @@ router.post(
   '/:id/participations',
   asyncHandler(eventController.participateEventHandler)
 );
+router.get('/:id', asyncHandler(eventController.getEventDetailHandler));
 
 export { router as eventRouter };
