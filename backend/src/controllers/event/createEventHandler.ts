@@ -8,10 +8,10 @@ import { createEvent } from '@/services/event/createEvent';
  * @param res Response
  */
 export const createEventHandler = async (req: Request, res: Response) => {
-  const { body } = req;
+  const { body, user } = req;
   const createdEvent = await createEvent({
     name: body.name,
-    organizerId: body.organizerId,
+    organizerId: user.id,
     description: body.description,
     location: body.location,
     date: new Date(body.date),

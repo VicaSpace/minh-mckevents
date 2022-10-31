@@ -9,6 +9,7 @@ import pinoHttp from 'pino-http';
 
 import config from '@/config';
 import router from '@/routes';
+import { AppUser } from '@/types/user';
 import { logger } from '@/utils/logger';
 
 const pinoHttpMiddleware = pinoHttp();
@@ -32,7 +33,7 @@ const main = async () => {
   app.use((req: Request, _res: Response, next: NextFunction) => {
     try {
       const decodedUser = jwt.verify(req.token, config.jwt.secret);
-      req.user = decodedUser as jwt.JwtPayload;
+      req.user = decodedUser as AppUser;
       next();
     } catch (err) {
       next(
