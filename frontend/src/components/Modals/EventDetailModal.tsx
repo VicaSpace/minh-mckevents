@@ -51,8 +51,8 @@ const EventDetailModal: React.FC<EventDetailProps> = ({ eventId, name }) => {
     <Modal
       title={name}
       isOpen={isOpen}
-      closeModal={() => dispatch(closeCreateEventModal())}
       openModal={() => dispatch(openCreateEventModal())}
+      closeModal={() => dispatch(closeCreateEventModal())}
       customActionSection={
         <button
           className={styles.actionSection}
@@ -61,14 +61,14 @@ const EventDetailModal: React.FC<EventDetailProps> = ({ eventId, name }) => {
             submitForm();
           }}
         >
-          CREATE YOUR EVENT
+          REGISTER
         </button>
       }
     >
       {/* Form section */}
       <div className={styles.container}>
         {/* Content here */}
-        <div>{detail.description}</div>
+        {detail && <div>{detail.description}</div>}
       </div>
     </Modal>
   );

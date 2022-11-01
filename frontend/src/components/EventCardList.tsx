@@ -2,6 +2,8 @@ import React from 'react';
 
 import EventCard from '@/components/EventCard';
 import EventDetailModal from '@/components/Modals/EventDetailModal';
+import { useAppDispatch } from '@/states/hooks';
+import { open as openEventDetailModal } from '@/states/modals/eventDetailModal/slice';
 
 export type EventData = Array<{
   id: number;
@@ -22,6 +24,7 @@ interface EventCardListProps {
 }
 
 const EventCardList: React.FC<EventCardListProps> = ({ data }) => {
+  const dispatch = useAppDispatch();
   return (
     <>
       {data.map((d) => {
@@ -30,6 +33,10 @@ const EventCardList: React.FC<EventCardListProps> = ({ data }) => {
             key={d.id}
             style={{
               marginBottom: '26px',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              dispatch(openEventDetailModal());
             }}
           >
             <EventCard
