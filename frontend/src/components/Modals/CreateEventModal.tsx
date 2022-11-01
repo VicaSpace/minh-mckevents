@@ -1,12 +1,14 @@
 import { useToast } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Modal from '@/components/Modals/Modal';
+import { createEventAction, fetchUpcomingEvents } from '@/states/event/slice';
 import { useAppDispatch, useAppSelector } from '@/states/hooks';
 import {
-  close as closeLoginModal,
-  open as openLoginModal,
-} from '@/states/modals/loginModal/slice';
+  close as closeCreateEventModal,
+  open as openCreateEventModal,
+} from '@/states/modals/createEventModal/slice';
+import { ThunkFetchState } from '@/states/thunk';
 
 import styles from './RegisterModal.module.css';
 
@@ -21,17 +23,21 @@ const CreateEventModal: React.FC<CreateEventModalProps> = () => {
   const [description, setDescription] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [office, setOffice] = useState<string>('Ho Chi Minh Office');
-  const [duration, setDuration] = useState<number>(1);
+  const [duration, setDuration] = useState<string>('');
   const [timeStart, setTimeStart] = useState<string>('');
   const [location, setLocation] = useState<string>('');
-  const [minParticipants, setMinParticipants] = useState<number>(0);
+  const [minParticipants, setMinParticipants] = useState<string>('');
 
   const dispatch = useAppDispatch();
-  // LoginModal Slice
+
+  // CreateEventModalSlice
   const { data: createEventModalData } = useAppSelector(
     (state) => state.createEventModalSlice
   );
   const { isOpen } = createEventModalData;
+
+  // Event slice
+  const { createStatus } = useAppSelector((state) => state.eventSlice);
 
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -45,18 +51,45 @@ const CreateEventModal: React.FC<CreateEventModalProps> = () => {
   };
 
   /**
-   * Login on Submit
+   * Create Event on Submit
    */
-  const loginOnSubmit = async () => {
-    // void dispatch();
+  const createOnSubmit = async () => {
+    void dispatch(
+      createEventAction({
+        date: new Date(date),
+        description,
+        location,
+        minParticipants: Number(minParticipants || 1),
+        name,
+        office,
+        timeStart: new Date(timeStart),
+        duration: Number(duration || 1),
+      })
+    );
   };
+
+  useEffect(() => {
+    if (createStatus === ThunkFetchState.Fulfilled) {
+      console.log('created eventsuccessfully');
+      toast({
+        title: `Event created successfully`,
+        description: `You can now check your created event in the dashboard`,
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+      });
+      dispatch(closeCreateEventModal());
+      // Re-fetch new data
+      void dispatch(fetchUpcomingEvents());
+    }
+  }, [createStatus]);
 
   return (
     <Modal
       title={'Event Create Form'}
       isOpen={isOpen}
-      closeModal={() => dispatch(closeLoginModal())}
-      openModal={() => dispatch(openLoginModal())}
+      closeModal={() => dispatch(closeCreateEventModal())}
+      openModal={() => dispatch(openCreateEventModal())}
       customActionSection={
         <button
           className={styles.actionSection}
@@ -75,7 +108,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            loginOnSubmit().catch(console.error);
+            createOnSubmit().catch(console.error);
           }}
           className={styles.formBody}
           ref={formRef}
@@ -101,11 +134,13 @@ const CreateEventModal: React.FC<CreateEventModalProps> = () => {
             <label htmlFor="description" className={styles.formLabel}>
               <span style={{ color: 'red' }}>*</span>&nbsp; Description:{' '}
             </label>
-            <input
-              type="text"
+            <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              style={{
+                height: '100px',
+              }}
               name="description"
               className={styles.formInput}
               placeholder="Enter description"
@@ -156,7 +191,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = () => {
               type="number"
               id="duration"
               value={duration}
-              onChange={(e) => setDuration(Number(e.target.value || 0))}
+              onChange={(e) => setDuration(e.target.value)}
               name="duration"
               className={styles.formInput}
               placeholder="Enter duration"
@@ -169,7 +204,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = () => {
               <span style={{ color: 'red' }}>*</span>&nbsp; Time start:{' '}
             </label>
             <input
-              type="date"
+              type="datetime-local"
               id="timeStart"
               value={timeStart}
               onChange={(e) => {
@@ -211,7 +246,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = () => {
               type="number"
               id="minParticipants"
               value={minParticipants}
-              onChange={(e) => setMinParticipants(Number(e.target.value || 0))}
+              onChange={(e) => setMinParticipants(e.target.value)}
               name="minParticipants"
               className={styles.formInput}
               placeholder="Minimum participants"

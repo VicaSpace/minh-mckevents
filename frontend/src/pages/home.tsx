@@ -9,7 +9,10 @@ import LeftNavbar from '@/components/Navbar/LeftNavbar';
 import RightNavbar from '@/components/Navbar/RightNavbar';
 import { verifyUser } from '@/lib/apis/auth';
 import { authenticateUser } from '@/states/auth/slice';
-import { fetchUpcomingEvents } from '@/states/event/slice';
+import {
+  fetchUpcomingEvents,
+  setData as setEventData,
+} from '@/states/event/slice';
 import { useAppDispatch, useAppSelector } from '@/states/hooks';
 import { open as openCreateEventModal } from '@/states/modals/createEventModal/slice';
 import { ThunkFetchState } from '@/states/thunk';
@@ -29,6 +32,14 @@ const HomePage: React.FC<{}> = () => {
   // const { isOpen } = createEventModalData;
 
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const onSubmitSearch = () => {
+    const newData = eventData.filter((e) => {
+      return e.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+    console.log('new data:', newData);
+    dispatch(setEventData([...newData]));
+  };
 
   /**
    * Verify User via Token
@@ -125,8 +136,16 @@ const HomePage: React.FC<{}> = () => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className={styles.actionSearchInput}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            onSubmitSearch();
+                          }
+                        }}
                       />
-                      <button className={styles.actionSearchInputBtn}>
+                      <button
+                        className={styles.actionSearchInputBtn}
+                        onClick={onSubmitSearch}
+                      >
                         <AiOutlineSearch />
                       </button>
                     </div>

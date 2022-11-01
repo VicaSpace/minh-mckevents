@@ -5,6 +5,7 @@ import authSlice from '@/states/auth/slice';
 import counterSlice from '@/states/counter/slice';
 import eventSlice from '@/states/event/slice';
 import createEventModalSlice from '@/states/modals/createEventModal/slice';
+import eventDetailModalSlice from '@/states/modals/eventDetailModal/slice';
 import loginModalSlice from '@/states/modals/loginModal/slice';
 import registerModalSlice from '@/states/modals/registerModal/slice';
 
@@ -19,6 +20,7 @@ export const store = configureStore({
     loginModalSlice,
     eventSlice,
     createEventModalSlice,
+    eventDetailModalSlice,
   },
 });
 

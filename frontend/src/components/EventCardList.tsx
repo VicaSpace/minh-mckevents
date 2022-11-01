@@ -1,6 +1,7 @@
 import React from 'react';
 
 import EventCard from '@/components/EventCard';
+import EventDetailModal from '@/components/Modals/EventDetailModal';
 
 export type EventData = Array<{
   id: number;
@@ -25,19 +26,26 @@ const EventCardList: React.FC<EventCardListProps> = ({ data }) => {
     <>
       {data.map((d) => {
         return (
-          <EventCard
+          <div
             key={d.id}
-            date={d.date}
-            id={d.id}
-            location={d.location}
-            minParticipants={d.minParticipants}
-            name={d.name}
-            office={d.office}
-            organizerId={d.organizerId}
-            participations={d.participations}
-            status={d.status}
-            timeSlots={d.timeSlots}
-          />
+            style={{
+              marginBottom: '26px',
+            }}
+          >
+            <EventCard
+              date={d.date}
+              id={d.id}
+              location={d.location}
+              minParticipants={d.minParticipants}
+              name={d.name}
+              office={d.office}
+              organizerId={d.organizerId}
+              participations={d.participations}
+              status={d.status}
+              timeSlots={d.timeSlots}
+            />
+            <EventDetailModal eventId={d.id} name={d.name} />
+          </div>
         );
       })}
     </>

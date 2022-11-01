@@ -24,7 +24,6 @@ export const getUpcomingEvents = async () => {
 
 export interface CreateEventPayload {
   name: string;
-  organizerId: number;
   description: string;
   date: Date;
   office: string;
@@ -55,6 +54,30 @@ export const createEvent = async (payload: CreateEventPayload) => {
       ...payload,
     },
     axiosConfig
+  );
+  return res.data;
+};
+
+interface GetEventDetailPayload {
+  eventId: number;
+}
+/**
+ * Get Event Detail
+ * @returns Upcoming Events
+ */
+export const getEventDetail = async (payload: GetEventDetailPayload) => {
+  const { eventId } = payload;
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) {
+    throw new Error('Unauthenticated call made to API.');
+  }
+  const res = await axios.get(
+    `${config.endpoint.backend}/api/events/${eventId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
   );
   return res.data;
 };
