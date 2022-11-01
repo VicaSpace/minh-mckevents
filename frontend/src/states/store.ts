@@ -3,6 +3,8 @@ import logger from 'redux-logger';
 
 import authSlice from '@/states/auth/slice';
 import counterSlice from '@/states/counter/slice';
+import eventSlice from '@/states/event/slice';
+import createEventModalSlice from '@/states/modals/createEventModal/slice';
 import loginModalSlice from '@/states/modals/loginModal/slice';
 import registerModalSlice from '@/states/modals/registerModal/slice';
 
@@ -15,6 +17,8 @@ export const store = configureStore({
     registerModalSlice,
     authSlice,
     loginModalSlice,
+    eventSlice,
+    createEventModalSlice,
   },
 });
 

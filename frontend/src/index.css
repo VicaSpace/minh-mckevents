@@ -22,7 +22,7 @@
   flex-shrink: 0;
   background-color: #223752;
   color: white;
-  width: 27vw;
+  width: 25vw;
   padding: 13px;
 }
 .top-right {
@@ -38,9 +38,4 @@
   flex-grow: 1;
   overflow-y: auto;
   padding: 20px;
-}
-ul {
-  display: inline-flex;
-  list-style: none;
-  margin: 0;
 }
