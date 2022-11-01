@@ -36,13 +36,6 @@ const EventDetailModal: React.FC<EventDetailProps> = ({ eventId, name }) => {
     );
   };
 
-  /**
-   * Create Event on Submit
-   */
-  const registerOnSubmit = async () => {
-    // void dispatch();
-  };
-
   useEffect(() => {
     void dispatch(getEventDetailAction(eventId));
   }, []);
